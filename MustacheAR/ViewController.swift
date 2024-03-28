@@ -22,6 +22,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, UICollectionViewDataS
     var mustachesCollectionView: UICollectionView!
     var stopButton: UIButton!
     
+    var isRecording = false
+    
     //let mustacheStyles = ["Chevron", "Dali", "English", "Fu Manchu", "Handlebar", "Horseshoe", "Imperial", "Lampshade", "Painter's Brush", "Pencil", "Petit Handlebar", "Pyramidal", "Toothbrush", "Walrus"]
     
     let mustacheStyles = [
@@ -45,20 +47,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, UICollectionViewDataS
         // Scene View Setup
         sceneView = ARSCNView(frame: self.view.bounds)
         self.view.addSubview(sceneView)
+
         
-        // Record Button Setup
-        recordButton = UIButton(frame: CGRect(x: 20, y: self.view.frame.height - 100, width: 120, height: 50))
-        recordButton.backgroundColor = .red
-        recordButton.setTitle("Record", for: .normal)
-        recordButton.addTarget(self, action: #selector(startRecording), for: .touchUpInside)
-        self.view.addSubview(recordButton)
-        
-        // Stop Button Setup
-        stopButton = UIButton(frame: CGRect(x: self.view.frame.width - 140, y: self.view.frame.height - 100, width: 120, height: 50))
-        stopButton.backgroundColor = .gray
-        stopButton.setTitle("Stop", for: .normal)
-        stopButton.addTarget(self, action: #selector(stopRecording), for: .touchUpInside)
-        self.view.addSubview(stopButton)
+        recordButton = UIButton(frame: CGRect(x: (self.view.frame.width - 120) / 2, y: self.view.frame.height - 100, width: 120, height: 50))
+         recordButton.backgroundColor = .red
+         recordButton.setTitle("Record", for: .normal)
+         recordButton.addTarget(self, action: #selector(toggleRecording), for: .touchUpInside)
+         self.view.addSubview(recordButton)
         
         // Mustaches CollectionView Setup
         let layout = UICollectionViewFlowLayout()
@@ -71,6 +66,58 @@ class ViewController: UIViewController, ARSCNViewDelegate, UICollectionViewDataS
         self.view.addSubview(mustachesCollectionView)
     }
     
+    // This single function toggles recording on or off based on the current state
+    @objc func toggleRecording() {
+        if isRecording {
+            // Stop Recording
+            recorder.stopRecording { [weak self] (previewController, error) in
+                DispatchQueue.main.async {
+                    guard let strongSelf = self else { return }
+                    
+                    if let error = error {
+                        print("Failed to stop recording: \(error.localizedDescription)")
+                    } else {
+                        print("Stopped recording successfully")
+                        // If you want to present the preview after stopping, uncomment below
+                        
+                        if let previewController = previewController {
+                            previewController.previewControllerDelegate = strongSelf
+                            strongSelf.present(previewController, animated: true, completion: nil)
+                        }
+                        
+                    }
+                    
+                    // UI updates to indicate that recording has stopped
+                    strongSelf.recordButton.backgroundColor = .red
+                    strongSelf.recordButton.setTitle("Record", for: .normal)
+                    strongSelf.isRecording = false
+                }
+            }
+        } else {
+            // Start Recording
+            guard recorder.isAvailable else {
+                print("Recording is not available at this time.")
+                return
+            }
+            
+            recorder.startRecording { [weak self] (error) in
+                DispatchQueue.main.async {
+                    if let error = error {
+                        print("Failed to start recording: \(error.localizedDescription)")
+                    } else {
+                        print("Started recording successfully")
+                    }
+                    
+                    // UI updates to indicate that recording has started
+                    self?.recordButton.backgroundColor = .gray
+                    self?.recordButton.setTitle("Stop", for: .normal)
+                    self?.isRecording = true
+                }
+            }
+        }
+    }
+
+    
     func setupARSession() {
         sceneView.delegate = self
         let configuration = ARFaceTrackingConfiguration()
@@ -81,6 +128,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, UICollectionViewDataS
     let recorder = RPScreenRecorder.shared()
 
     @objc func startRecording() {
+        
+        guard !isRecording else {return}
+        
         guard recorder.isAvailable else {
             print("Recording is not available at this time.")
             return
@@ -103,31 +153,11 @@ class ViewController: UIViewController, ARSCNViewDelegate, UICollectionViewDataS
         }
     }
 
-    @objc func stopRecording() {
-        recorder.stopRecording { [weak self] (previewController, error) in
-            DispatchQueue.main.async {
-                self?.recordButton.isEnabled = true
-                self?.stopButton.isEnabled = false
 
-                // Revert UI changes made at the start of recording
-                self?.recordButton.backgroundColor = .red
-                self?.recordButton.setTitle("Record", for: .normal)
-                //self?.hideRecordingIndicator()
-
-                if let error = error {
-                    print("Failed to stop recording: \(error.localizedDescription)")
-                    //FIXME: Handle the error condition
-                } else {
-                    print("Stopped recording successfully")
-                    // FIXME: Optionally preview the recording
-                    if let previewController = previewController {
-                        previewController.previewControllerDelegate = self
-                        self?.present(previewController, animated: true, completion: nil)
-                    }
-                }
-            }
-        }
+    func saveRecording(filename: String, duration: Double, tag: String) {
+        // Implement saving logic here using Core Data
     }
+
     
     var recordingIndicator: UIView?
 
@@ -220,27 +250,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, UICollectionViewDataS
             }
 
         }
-    
-    
-//    func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-//        guard let faceAnchor = anchor as? ARFaceAnchor else { return }
-//        
-//        let mouthCloseValue = faceAnchor.blendShapes[.mouthClose] as? Float ?? 0.0
-//           let noseSneerLeft = faceAnchor.blendShapes[.noseSneerLeft] as? Float ?? 0.0
-//           let noseSneerRight = faceAnchor.blendShapes[.noseSneerRight] as? Float ?? 0.0
-//        
-//        let noseTipPosition = faceAnchor.geometry.vertices[noseTipIndex]
-//        let upperLipPosition = faceAnchor.geometry.vertices[upperLipIndex]
-//        
-//        // Calculate the midpoint or desired position between the nose and upper lip
-//        let mustachePosition = calculateMustachePosition(noseTip: noseTipPosition, upperLip: upperLipPosition)
-//        
-//        // Update the mustache's position
-//        DispatchQueue.main.async {
-//            self.updateMustachePosition(mustachePosition)
-//        }
-//    }
-
 
     func createMustacheNode(with imageName: String) -> SCNNode {
         guard let image = UIImage(named: imageName) else {
@@ -280,13 +289,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, UICollectionViewDataS
             geometry.firstMaterial?.diffuse.contents = image
         }
     }
- 
-
-
-
-    
-
-
 
     
     func previewController(_ previewController: RPPreviewViewController, didFinishWithActivityTypes activityTypes: Set<String>) {
