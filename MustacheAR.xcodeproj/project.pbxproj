@@ -12,7 +12,7 @@
 		5C7D4EAA2BB587EC00C4B79D /* VideoManagerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7D4EA92BB587EC00C4B79D /* VideoManagerViewController.swift */; };
 		5CE8B4032B7EF11E00EE1A35 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE8B4022B7EF11E00EE1A35 /* AppDelegate.swift */; };
 		5CE8B4052B7EF11E00EE1A35 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE8B4042B7EF11E00EE1A35 /* SceneDelegate.swift */; };
-		5CE8B4072B7EF11E00EE1A35 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE8B4062B7EF11E00EE1A35 /* ViewController.swift */; };
+		5CE8B4072B7EF11E00EE1A35 /* MustacheARViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE8B4062B7EF11E00EE1A35 /* MustacheARViewController.swift */; };
 		5CE8B40A2B7EF11E00EE1A35 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5CE8B4082B7EF11E00EE1A35 /* Main.storyboard */; };
 		5CE8B40C2B7EF12200EE1A35 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5CE8B40B2B7EF12200EE1A35 /* Assets.xcassets */; };
 		5CE8B40F2B7EF12200EE1A35 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5CE8B40D2B7EF12200EE1A35 /* LaunchScreen.storyboard */; };
@@ -25,7 +25,7 @@
 		5CE8B3FF2B7EF11E00EE1A35 /* MustacheAR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MustacheAR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CE8B4022B7EF11E00EE1A35 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5CE8B4042B7EF11E00EE1A35 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		5CE8B4062B7EF11E00EE1A35 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		5CE8B4062B7EF11E00EE1A35 /* MustacheARViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MustacheARViewController.swift; sourceTree = "<group>"; };
 		5CE8B4092B7EF11E00EE1A35 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5CE8B40B2B7EF12200EE1A35 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5CE8B40E2B7EF12200EE1A35 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -43,6 +43,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5C65049B2BB610ED00224F48 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				5CE8B4062B7EF11E00EE1A35 /* MustacheARViewController.swift */,
+				5C7D4EA92BB587EC00C4B79D /* VideoManagerViewController.swift */,
+				5C7D4EA42BB583B100C4B79D /* RecordingsListViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
 		5CE8B3F62B7EF11E00EE1A35 = {
 			isa = PBXGroup;
 			children = (
@@ -63,15 +73,13 @@
 		5CE8B4012B7EF11E00EE1A35 /* MustacheAR */ = {
 			isa = PBXGroup;
 			children = (
+				5C65049B2BB610ED00224F48 /* ViewControllers */,
 				5CE8B4022B7EF11E00EE1A35 /* AppDelegate.swift */,
 				5CE8B4042B7EF11E00EE1A35 /* SceneDelegate.swift */,
-				5CE8B4062B7EF11E00EE1A35 /* ViewController.swift */,
 				5CE8B4082B7EF11E00EE1A35 /* Main.storyboard */,
 				5CE8B40B2B7EF12200EE1A35 /* Assets.xcassets */,
 				5CE8B40D2B7EF12200EE1A35 /* LaunchScreen.storyboard */,
 				5CE8B4102B7EF12200EE1A35 /* Info.plist */,
-				5C7D4EA42BB583B100C4B79D /* RecordingsListViewController.swift */,
-				5C7D4EA92BB587EC00C4B79D /* VideoManagerViewController.swift */,
 			);
 			path = MustacheAR;
 			sourceTree = "<group>";
@@ -149,7 +157,7 @@
 			files = (
 				5C7D4EAA2BB587EC00C4B79D /* VideoManagerViewController.swift in Sources */,
 				5C7D4EA52BB583B100C4B79D /* RecordingsListViewController.swift in Sources */,
-				5CE8B4072B7EF11E00EE1A35 /* ViewController.swift in Sources */,
+				5CE8B4072B7EF11E00EE1A35 /* MustacheARViewController.swift in Sources */,
 				5CE8B4032B7EF11E00EE1A35 /* AppDelegate.swift in Sources */,
 				5C7D4EA82BB5840500C4B79D /* AppDataModel.xcdatamodeld in Sources */,
 				5CE8B4052B7EF11E00EE1A35 /* SceneDelegate.swift in Sources */,
